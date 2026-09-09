@@ -7,7 +7,7 @@ namespace Server.Mappers;
 
 public static class UserMapper
 {
-    public static UserDto ToDto(this AppUser user, TokenService tokenService, List<string> roles)
+    public static async Task<UserDto> ToDto(this AppUser user, TokenService tokenService, List<string> roles)
     {
         return new UserDto
         {
@@ -15,7 +15,7 @@ public static class UserMapper
             Email = user.Email!,
             DisplayName = user.DisplayName,
             ImageUrl = user.Photos.FirstOrDefault(p => p.IsMain && p.IsApproved)?.Url,
-            Token = tokenService.CreateToken(user),
+            Token = await tokenService.CreateToken(user),
             Roles = roles
         };
     }
@@ -48,4 +48,27 @@ public static class UserMapper
         user.Institution = dto.Institution;
         user.Interests = dto.Interests;
     }
+
+    public static UserProfileDto ToDto(this AppUser user)
+{
+    return new UserProfileDto
+    {
+        Id = user.Id,
+        Email = user.Email!,
+        DisplayName = user.DisplayName,
+        DateOfBirth = user.DateOfBirth,
+        Gender = user.Gender,
+        LookingFor = user.LookingFor ?? string.Empty,
+        Description = user.Description,
+        City = user.City,
+        CreatedAt = user.CreatedAt,
+        LastActive = user.LastActive,
+        Mbti = user.Mbti,
+        EducationLevel = user.EducationLevel,
+        FieldOfStudy = user.FieldOfStudy,
+        Institution = user.Institution,
+        Interests = user.Interests,
+        Photos = user.Photos.Select(p => p.ToDto()).ToList()
+    };
+}
 }

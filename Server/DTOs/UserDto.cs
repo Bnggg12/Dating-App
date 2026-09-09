@@ -49,7 +49,7 @@ public class UserProfileDto
     public int Id { get; set; }
     public string Email { get; set; } = null!;
     public string DisplayName { get; set; } = null!;
-    public int Age { get; set; }
+    public DateOnly DateOfBirth { get; set; }
     public string Gender { get; set; } = null!;
     public string LookingFor { get; set; } = null!;
     public string Description { get; set; } = null!;

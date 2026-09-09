@@ -19,13 +19,16 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<
 
         builder.Entity<AppUser>(entity =>
         {
+            entity.ToTable("Users");
+
+            entity.Property(e => e.PhoneNumber).HasMaxLength(10).IsFixedLength().IsUnicode(false);
             entity.Property(e => e.RefreshToken).HasMaxLength(255);
             entity.Property(e => e.DisplayName).HasMaxLength(100);
             entity.Property(e => e.Gender).HasMaxLength(6);
             entity.Property(e => e.LookingFor).HasMaxLength(6);
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.City).HasMaxLength(20);
-            entity.Property(e => e.Mbti).HasMaxLength(4).IsFixedLength();
+            entity.Property(e => e.Mbti).HasMaxLength(4).IsFixedLength().IsUnicode(false);
             entity.Property(e => e.EducationLevel).HasMaxLength(30);
             entity.Property(e => e.FieldOfStudy).HasMaxLength(100);
             entity.Property(e => e.Institution).HasMaxLength(100);
@@ -39,6 +42,8 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<
 
         builder.Entity<AppRole>(entity =>
         {
+            entity.ToTable("Roles");
+
             entity.HasMany(ur => ur.UserRoles)
                 .WithOne(r => r.Role)
                 .HasForeignKey(ur => ur.RoleId)
@@ -46,10 +51,21 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasData(
-                new AppRole { Id = 1, Name = "Member", NormalizedName = "MEMBER" },
-                new AppRole { Id = 2, Name = "Moderator", NormalizedName = "MODERATOR" },
-                new AppRole { Id = 3, Name = "Admin", NormalizedName = "ADMIN" }
+                new AppRole { Id = 1, Name = "Member", NormalizedName = "MEMBER", ConcurrencyStamp = "member-role" },
+                new AppRole { Id = 2, Name = "Moderator", NormalizedName = "MODERATOR", ConcurrencyStamp = "moderator-role" },
+                new AppRole { Id = 3, Name = "Admin", NormalizedName = "ADMIN", ConcurrencyStamp = "admin-role" }
             );
+        });
+
+        builder.Entity<AppUserRole>(entity =>
+        {
+            entity.ToTable("UserRoles");
+        });
+
+        builder.Entity<Photo>(entity =>
+        {
+            entity.Property(p => p.Url).HasMaxLength(500);
+            entity.Property(p => p.PublicId).HasMaxLength(255);
         });
     }
 

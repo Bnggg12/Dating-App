@@ -1,4 +1,4 @@
-using Server.Cores.Exceptions;
+using Server.Core.Exceptions;
 
 namespace Server.Middlewares;
 
@@ -10,7 +10,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             await next(context);
         }
-        catch (AppException e)
+        catch (AppExceptions e)
         {
             context.Response.StatusCode = e.StatusCode;
             await context.Response.WriteAsJsonAsync(new { message = e.Message });
