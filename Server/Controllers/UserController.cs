@@ -11,6 +11,13 @@ namespace Server.Controllers;
 [Route("api/[controller]")]
 public class UserController(UserService userService) : ControllerBase
 {
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<UserCardDto>>> Get()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        return Ok(await userService.GetAsync(userId));
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<UserProfileDto>> GetById(int id)
     {

@@ -1,0 +1,54 @@
+@if (userService.user(); as member) {
+  <div class="flex gap-6 mt-4">
+    <div class="card bg-base-100 shadow-md flex flex-col h-[85vh] w-1/4 border border-base-200">
+      <div class="p-6 flex flex-col items-center">
+        <img 
+          [src]="mainImageUrl()" 
+          [alt]="member.displayName" 
+          class="rounded-full w-40 h-40 object-cover shadow-inner border-2 border-primary/20" />
+        
+        <div class="flex flex-col items-center mt-4">
+          <div class="text-2xl font-bold text-primary">
+            {{ member.displayName }}, {{ member.dateOfBirth | age }}
+          </div>
+          <div class="text-sm text-base-content/70 mt-1">
+            {{ member.city }}
+          </div>
+        </div>
+      </div>
+
+      <div class="divider my-0 px-4"></div>
+
+      <div class="card-body p-4">
+        <ul class="menu menu-md w-full gap-1">
+          <li>
+            <a routerLink="profile" routerLinkActive="active font-semibold">Thông tin cá nhân</a>
+          </li>
+          <li>
+            <a routerLink="photos" routerLinkActive="active font-semibold">Bộ sưu tập ảnh</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-actions p-4 mt-auto">
+        <button routerLink="/members" class="btn btn-outline btn-sm w-full">
+          Quay lại danh sách
+        </button>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-md w-3/4 p-6 flex flex-col h-[85vh] border border-base-200 overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b border-base-200">
+        <h3 class="text-2xl font-bold text-primary">{{ title() }}</h3>
+      </div>
+
+      <div class="py-4 h-full">
+        <router-outlet />
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-20 text-lg text-base-content/60">
+    Đang tải thông tin người dùng...
+  </div>
+}

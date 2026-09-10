@@ -1,0 +1,74 @@
+<div class="card bg-base-100 w-full shadow-2xl p-6 rounded-box">
+  <div class="card-title justify-center text-3xl font-bold text-primary mb-4">Tạo tài khoản</div>
+
+  <ul class="steps mb-6">
+    <li class="step step-primary">Đăng nhập</li>
+    <li class="step" [class.step-primary]="currentStep() === 2">Hồ sơ</li>
+  </ul>
+
+  @if (currentStep() === 1) {
+    <form [formGroup]="credentialForm" class="flex flex-col gap-4">
+      <app-text-input label="Email" formControlName="email" />
+      <app-text-input label="Họ và tên" formControlName="displayName" />
+      <app-text-input label="Mật khẩu" formControlName="password" type="password" />
+      <app-text-input label="Xác nhận mật khẩu" formControlName="confirmPassword" type="password" />
+
+      <div class="flex items-center justify-end gap-3 mt-4">
+        <button (click)="cancel()" type="button" class="btn btn-ghost">Hủy</button>
+        <button [disabled]="!credentialForm.valid" (click)="nextStep()" class="btn btn-primary" type="button">Tiếp tục</button>
+      </div>
+    </form>
+  }
+
+  @if (currentStep() === 2) {
+    <form [formGroup]="profileForm" class="flex flex-col gap-4">
+      <div class="flex items-center gap-6 py-2">
+        <span class="font-medium">Giới tính:</span>
+        <label class="flex gap-2 items-center cursor-pointer">
+          <input type="radio" formControlName="gender" value="male" class="radio radio-primary" />
+          <span>Nam</span>
+        </label>
+        <label class="flex gap-2 items-center cursor-pointer">
+          <input type="radio" formControlName="gender" value="female" class="radio radio-primary" />
+          <span>Nữ</span>
+        </label>
+      </div>
+
+      <app-text-input [maxDate]="getMaxDate()" type="date" label="Ngày sinh" formControlName="dateOfBirth" />
+      <div class="flex flex-col w-full text-left gap-1">
+          <label class="floating-label w-full">
+              <span>Thành phố</span>
+              <select 
+                  formControlName="city" 
+                  class="select w-full"
+                  [class.select-error]="profileForm.get('city')?.invalid && profileForm.get('city')?.touched"
+                  [class.select-success]="profileForm.get('city')?.valid && profileForm.get('city')?.touched">
+                  <option value="" disabled selected>Chọn thành phố</option>
+                  @for (city of cities(); track city) {
+                      <option [value]="city">{{ city }}</option>
+                  }
+              </select>
+          </label>
+          @if (profileForm.get('city')?.hasError('required') && profileForm.get('city')?.touched) {
+              <div class="text-error text-xs px-1">Vui lòng chọn thành phố</div>
+          }
+      </div>
+      <app-text-input label="Giới thiệu bản thân" type="textarea" formControlName="description" [placeholderText]="'Mình là\n\nMình đang tìm kiếm'" />
+
+      <div class="flex items-center justify-end gap-3 mt-4">
+        <button (click)="prevStep()" type="button" class="btn btn-ghost">Quay lại</button>
+        <button [disabled]="!profileForm.valid" (click)="register()" class="btn btn-primary" type="button">Hoàn tất</button>
+      </div>
+    </form>
+  }
+
+  @if (validationErrors().length > 0) {
+    <div class="alert alert-error mt-4">
+      <ul class="list-disc list-inside">
+        @for (error of validationErrors(); track $index) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>

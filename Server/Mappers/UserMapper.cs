@@ -49,6 +49,19 @@ public static class UserMapper
         user.Interests = dto.Interests;
     }
 
+    public static UserCardDto ToCardDto(this AppUser user)
+    {
+        return new UserCardDto
+        {
+            Id = user.Id,
+            DisplayName = user.DisplayName,
+            DateOfBirth = user.DateOfBirth,
+            City = user.City,
+            Gender = user.Gender,
+            ImageUrl = user.Photos.FirstOrDefault(p => p.IsMain && p.IsApproved)?.Url
+        };
+    }
+
     public static UserProfileDto ToDto(this AppUser user)
 {
     return new UserProfileDto

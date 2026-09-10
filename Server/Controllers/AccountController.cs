@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Core.Constants;
 using Server.DTOs;
 using Server.Services;
 
@@ -45,5 +46,23 @@ public class AccountController(AccountService accountService) : ControllerBase
     {
         await accountService.LogoutAsync();
         return NoContent();
+    }
+
+    [HttpGet("mbtis")]
+    public ActionResult<IReadOnlyList<string>> GetMbtis()
+    {
+        return Ok(AppConstants.MbtiList);
+    }
+
+    [HttpGet("edu-levels")]
+    public ActionResult<IReadOnlyList<string>> GetEduLevels()
+    {
+        return Ok(AppConstants.EducationLevels);
+    }
+
+    [HttpGet("cities")]
+    public ActionResult<IReadOnlyList<string>> GetCities()
+    {
+        return Ok(AppConstants.Cities);
     }
 }

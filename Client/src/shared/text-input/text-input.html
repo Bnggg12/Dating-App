@@ -1,0 +1,46 @@
+<div class="flex flex-col w-full text-left gap-1">
+    <label class="floating-label w-full">
+        <span>{{label()}}</span>
+
+        @if (type() === 'textarea') {
+            <textarea 
+                class="textarea w-full h-28 resize-none"
+                [class.textarea-error]="control.invalid && control.touched"
+                [class.textarea-success]="control.valid && control.touched"
+                [formControl]="control" 
+                [placeholder]="placeholderText() || label()"></textarea>
+        } @else {
+            <input 
+                class="input w-full"
+                [type]="type()"
+                [max]="maxDate()"
+                [class.input-error]="control.invalid && control.touched"
+                [class.input-success]="control.valid && control.touched"
+                [formControl]="control" 
+                [placeholder]="placeholderText() || label()">
+        }
+    </label>
+
+    @if (control.invalid && control.touched) {
+        <div class="text-error text-xs px-1">
+            @if (control.hasError('required') && control.touched) {
+                <div class="validation-hint text-error text-xs">{{label()}} không được để trống</div>
+            }
+            @else if (control.hasError('email') && control.touched) {
+                <div class="validation-hint text-error text-xs">Email không hợp lệ</div>
+            }
+            @else if (control.hasError('minlength') && control.touched) {
+                <div class="validation-hint text-error text-xs">{{label()}} tối thiểu {{control.errors?.['minlength'].requiredLength}} ký tự</div>
+            }
+            @else if (control.hasError('maxlength') && control.touched) {
+                <div class="validation-hint text-error text-xs">{{label()}} không quá {{control.errors?.['maxlength'].requiredLength}} ký tự</div>
+            }
+            @else if (control.hasError('pattern')) {
+                <div class="validation-hint text-error text-xs">{{label()}} phải có ít nhất 1 chữ hoa và 1 chữ số</div>
+            }
+            @else if (control.hasError('passwordMismatch') && control.touched) {
+                <div class="validation-hint text-error text-xs">Mật khẩu xác nhận không khớp</div>
+            }
+        </div>
+    }
+</div>

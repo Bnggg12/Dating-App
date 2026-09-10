@@ -9,6 +9,16 @@ namespace Server.Services;
 
 public class UserService(AppDbContext db)
 {
+    public async Task<IReadOnlyList<UserCardDto>> GetAsync(int userId)
+    {
+        return await db.Users
+            .AsNoTracking()
+            .Where(u => u.Id != userId)
+            .Include(u => u.Photos)
+            .Select(u => u.ToCardDto())
+            .ToListAsync();
+    }
+
     public async Task<UserProfileDto> GetByIdAsync(int id)
     {
         var user = await db.Users

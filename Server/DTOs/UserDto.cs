@@ -44,6 +44,16 @@ public class UserUpdateDto
     public List<string> Interests { get; set; } = [];
 }
 
+public class UserCardDto
+{
+    public int Id { get; set; }
+    public string DisplayName { get; set; } = null!;
+    public DateOnly DateOfBirth { get; set; }
+    public string City { get; set; } = null!;
+    public string Gender { get; set; } = null!;
+    public string? ImageUrl { get; set; }
+}
+
 public class UserProfileDto
 {
     public int Id { get; set; }
