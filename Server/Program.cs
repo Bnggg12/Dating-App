@@ -22,6 +22,7 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<PhotoService>();
 
 builder.Services.AddIdentityCore<AppUser>(opt =>
@@ -50,6 +51,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+    .AddPolicy("RequireModerateRole", policy => policy.RequireRole("Admin", "Moderator"));
 
 var app = builder.Build();
 

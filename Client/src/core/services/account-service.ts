@@ -10,6 +10,7 @@ import { tap } from 'rxjs';
 export class AccountService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
+  private refreshIntervalId: any = null;
 
   currentUser = signal<User | null>(null);
 
@@ -18,7 +19,7 @@ export class AccountService {
       tap(user => {
         if (user) {
           this.setCurrentUser(user);
-          this.startTokenRefreshInterval();
+          this.startRefreshToken();
         }
       })
     );
@@ -29,7 +30,7 @@ export class AccountService {
       tap(user => {
         if (user) {
           this.setCurrentUser(user);
-          this.startTokenRefreshInterval();
+          this.startRefreshToken();
         }
       })
     );
@@ -39,17 +40,26 @@ export class AccountService {
     return this.http.post<User>(this.baseUrl + 'account/refresh-token', {}, {withCredentials: true})
   }
 
-  startTokenRefreshInterval() {
-    setInterval(() => {
-      this.http.post<User>(this.baseUrl + 'account/refresh-token', {}, {withCredentials: true}).subscribe({
-        next: user => {
-          this.setCurrentUser(user);
-        },
-        error: () => {
-          this.logout();
-        }
-      })
-    }, 24 * 60 * 60 * 1000)
+  startRefreshToken() {
+    this.stopRefreshToken();
+        
+    this.refreshIntervalId = setInterval(() => {
+        this.refreshToken().subscribe({
+            next: user => {
+                this.setCurrentUser(user);
+            },
+            error: () => {
+                this.logout();
+            }
+        })
+    }, 14 * 60 * 1000)
+  }
+
+  stopRefreshToken() {
+      if (this.refreshIntervalId) {
+          clearInterval(this.refreshIntervalId);
+          this.refreshIntervalId = null;
+      }
   }
 
   logout() {

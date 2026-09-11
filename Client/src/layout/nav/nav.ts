@@ -4,10 +4,11 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { themes } from '../theme';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../core/services/user-service';
+import { HasRole } from '../../shared.directives/has-role';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLinkActive, RouterLink, FormsModule],
+  imports: [RouterLinkActive, RouterLink, FormsModule, HasRole],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
@@ -37,8 +38,7 @@ export class Nav implements OnInit {
   }
 
   protected mainImageUrl = computed(() => {
-    const photos = this.userService.user()?.photos;
-    return photos?.find(p => p.isMain && p.isApproved)?.url || '/user.png';
+    return this.accountService.currentUser()?.imageUrl || '/user.png';
   });
 
   login() {

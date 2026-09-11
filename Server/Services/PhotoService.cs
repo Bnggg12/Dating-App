@@ -109,7 +109,7 @@ public class PhotoService
         return uploadResult;
     }
 
-    private async Task<DeletionResult> DeletePhotoCloudinaryAsync(string publicId)
+    public async Task<DeletionResult> DeletePhotoCloudinaryAsync(string publicId)
     {
         var deleteParams = new DeletionParams(publicId);
         return await _cloudinary.DestroyAsync(deleteParams);

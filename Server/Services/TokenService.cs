@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Server.Helpers;
 using Server.Models;
 
 namespace Server.Services;
@@ -32,7 +33,7 @@ public class TokenService(IConfiguration config, UserManager<AppUser> userManage
         var tokenDescriptor = new SecurityTokenDescriptor
         {
           Subject = new ClaimsIdentity(claims),
-          Expires = DateTime.UtcNow.AddMinutes(15),
+          Expires = TimeHelper.NowVN().AddMinutes(15),
           SigningCredentials = creds
         };
 

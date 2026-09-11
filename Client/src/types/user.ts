@@ -48,7 +48,7 @@ export type UserProfile = {
   institution: string | null
   interests: string[]
   photos: Photo[]
-}
+};
 
 export type UserUpdate = {
   displayName: string;
@@ -60,11 +60,26 @@ export type UserUpdate = {
   fieldOfStudy?: string | null;
   institution?: string | null;
   interests: string[];
-}
+};
 
 export type Photo = {
   id: number
   url: string
   isMain: boolean
   isApproved: boolean
-}
+};
+
+export type UserRole = {
+  userId: number;
+  email: string;
+  displayName: string;
+  imageUrl: string | null;
+  roles: string[];
+};
+
+export type PhotoForApprove = {
+  id: number;
+  url: string;
+  userId: number;
+  displayName: string;
+};

@@ -63,25 +63,37 @@ public static class UserMapper
     }
 
     public static UserProfileDto ToDto(this AppUser user)
-{
-    return new UserProfileDto
     {
-        Id = user.Id,
-        Email = user.Email!,
-        DisplayName = user.DisplayName,
-        DateOfBirth = user.DateOfBirth,
-        Gender = user.Gender,
-        LookingFor = user.LookingFor ?? string.Empty,
-        Description = user.Description,
-        City = user.City,
-        CreatedAt = user.CreatedAt,
-        LastActive = user.LastActive,
-        Mbti = user.Mbti,
-        EducationLevel = user.EducationLevel,
-        FieldOfStudy = user.FieldOfStudy,
-        Institution = user.Institution,
-        Interests = user.Interests,
-        Photos = user.Photos.Select(p => p.ToDto()).ToList()
-    };
-}
+        return new UserProfileDto
+        {
+            Id = user.Id,
+            Email = user.Email!,
+            DisplayName = user.DisplayName,
+            DateOfBirth = user.DateOfBirth,
+            Gender = user.Gender,
+            LookingFor = user.LookingFor ?? string.Empty,
+            Description = user.Description,
+            City = user.City,
+            CreatedAt = user.CreatedAt,
+            LastActive = user.LastActive,
+            Mbti = user.Mbti,
+            EducationLevel = user.EducationLevel,
+            FieldOfStudy = user.FieldOfStudy,
+            Institution = user.Institution,
+            Interests = user.Interests,
+            Photos = user.Photos.Select(p => p.ToDto()).ToList()
+        };
+    }
+
+    public static UserRoleDto ToApproveDto(this AppUser user)
+    {
+        return new UserRoleDto
+        {
+            UserId = user.Id,
+            Email = user.Email!,
+            DisplayName = user.DisplayName,
+            ImageUrl = user.Photos.FirstOrDefault(p => p.IsMain && p.IsApproved)?.Url,
+            Roles = user.UserRoles.Select(ur => ur.Role.Name).ToList()!
+        };
+    }
 }

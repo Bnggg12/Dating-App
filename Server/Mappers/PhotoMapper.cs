@@ -28,4 +28,15 @@ public static class PhotoMapper
             UserId = userId
         };
     }
+
+    public static ApprovePhotoDto ToApproveDto(this Photo photo)
+    {
+        return new ApprovePhotoDto
+        {
+            Id = photo.Id,
+            Url = photo.Url,
+            UserId = photo.UserId, 
+            DisplayName = photo.User.DisplayName
+        };
+    }
 }
