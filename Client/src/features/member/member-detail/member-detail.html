@@ -2,10 +2,16 @@
   <div class="flex gap-6 mt-4">
     <div class="card bg-base-100 shadow-md flex flex-col h-[85vh] w-1/4 border border-base-200">
       <div class="p-6 flex flex-col items-center">
-        <img 
-          [src]="mainImageUrl()" 
-          [alt]="member.displayName" 
-          class="rounded-full w-40 h-40 object-cover shadow-inner border-2 border-primary/20" />
+        <div class="relative">
+          <img 
+            [src]="mainImageUrl()" 
+            [alt]="member.displayName" 
+            class="rounded-full w-40 h-40 object-cover shadow-inner border-2 border-primary/20" />
+          
+          @if (isOnline(member.lastActive)) {
+            <span class="absolute bottom-2 right-2 size-4 bg-success border-2 border-base-100 rounded-full shadow-sm"></span>
+          }
+        </div>
         
         <div class="flex flex-col items-center mt-4">
           <div class="text-2xl font-bold text-primary">
@@ -14,6 +20,13 @@
           <div class="text-sm text-base-content/70 mt-1">
             {{ member.city }}
           </div>
+          
+          <p class="text-xs text-base-content/70 flex items-center gap-1.5 mt-1">
+            <span class="inline-block size-2 rounded-full" 
+                  [class.bg-success]="isOnline(member.lastActive)" 
+                  [class.bg-base-content/30]="!isOnline(member.lastActive)"></span>
+            <span>{{ member.lastActive | timeAgo }}</span>
+          </p>
         </div>
       </div>
 
@@ -31,8 +44,18 @@
       </div>
 
       <div class="card-actions p-4 mt-auto">
-        <button routerLink="/members" class="btn btn-outline btn-sm w-full">
-          Quay lại danh sách
+        <button routerLink="/members" class="btn btn-outline btn-sm flex-1">
+          Quay lại
+        </button>
+        <button 
+          class="btn btn-sm flex-1"
+          [class.btn-disabled]="accountService.currentUser()?.id === member.id"
+          [class.btn-error]="likeService.likeIds().includes(member.id)"
+          [class.text-white]="likeService.likeIds().includes(member.id)"
+          [class.btn-outline]="!likeService.likeIds().includes(member.id)"
+          [class.btn-primary]="!likeService.likeIds().includes(member.id)"
+          (click)="likeService.toggleLike(member.id)">
+          {{ likeService.likeIds().includes(member.id) ? 'Bỏ thích' : 'Thích' }}
         </button>
       </div>
     </div>

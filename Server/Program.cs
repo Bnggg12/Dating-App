@@ -24,6 +24,13 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<PhotoService>();
+builder.Services.AddScoped<LikeService>();
+builder.Services.AddScoped<LogUserActivity>();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<LogUserActivity>();
+});
 
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {

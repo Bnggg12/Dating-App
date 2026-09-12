@@ -16,7 +16,7 @@ public class AdminService(UserManager<AppUser> userManager, AppDbContext db, Pho
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .Include(u => u.Photos)
-            .OrderBy(u => u.DisplayName)
+            .OrderBy(u => u.Id)
             .ToListAsync();
 
         return users.Select(u => u.ToApproveDto());

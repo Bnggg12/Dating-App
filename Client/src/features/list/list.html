@@ -1,0 +1,58 @@
+<div class="tabs tabs-box tabs-lg text-primary w-fit mb-4">
+  @for (tab of tabs; track $index) {
+    <button 
+      role="tab" 
+      class="tab"
+      [class.tab-active]="type === tab.value"
+      (click)="setType(tab.value)">
+      {{ tab.label }}
+    </button>
+  }
+</div>
+
+@if (members().length > 0) {
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6">
+    @for (user of members(); track user.id) {
+      <div 
+        [routerLink]="['/members', user.id]" 
+        class="card bg-base-100 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-base-200 group">
+        
+        <figure class="relative aspect-3/4 overflow-hidden bg-base-300">
+          <img 
+            [src]="user.imageUrl || '/user.png'" 
+            [alt]="user.displayName"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          
+          <button 
+            class="btn btn-circle btn-sm absolute top-3 right-3 z-10 border-none hover:bg-black/60 text-white"
+            [class.btn-error]="likeService.likeIds().includes(user.id)"
+            (click)="onLike($event, user.id)">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke="currentColor" class="size-4"
+              [class.fill-current]="likeService.likeIds().includes(user.id)"
+              [class.text-white]="likeService.likeIds().includes(user.id)">
+              <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+            </svg>
+          </button>
+
+          <div class="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/80 via-black/40 to-transparent p-3 text-white">
+            <h3 class="font-bold text-lg leading-tight flex items-center gap-1.5">
+              <span>{{ user.displayName }}</span>,
+              <span>{{ user.dateOfBirth | age }}</span>
+            </h3>
+            <p class="text-xs text-white/80 flex items-center gap-1 mt-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-3.5">
+                <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 1 0 3 9c0 3.492 1.698 5.988 3.36 7.587a15.704 15.704 0 0 0 3.03 2.198l.019.009.006.002.002.001ZM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ user.city }}</span>
+            </p>
+          </div>
+        </figure>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="text-center py-20 text-base-content/60 text-lg">
+    Không có dữ liệu tương ứng
+  </div>
+}

@@ -26,4 +26,7 @@ public class AppUser : IdentityUser<int>
     public List<Photo> Photos { get; set; } = [];
     
     public List<AppUserRole> UserRoles { get; set; } = [];
+
+    public List<UserLike> LikeByMembers { get; set; } = [];
+    public List<UserLike> LikedMembers { get; set; } = [];
 }

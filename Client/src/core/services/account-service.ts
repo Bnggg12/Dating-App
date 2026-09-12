@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Login, Register, User } from '../../types/user';
 import { tap } from 'rxjs';
+import { LikeService } from './like-service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class AccountService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
   private refreshIntervalId: any = null;
+  private likeService = inject(LikeService);
 
   currentUser = signal<User | null>(null);
 
@@ -66,6 +68,7 @@ export class AccountService {
     return this.http.post(this.baseUrl + 'account/logout', {}, {withCredentials: true}).subscribe({
       next: () => {
         this.currentUser.set(null);
+        this.likeService.clearLikeIds();
       }
     })
   }
@@ -73,6 +76,7 @@ export class AccountService {
   setCurrentUser(user: User) {
     user.roles = this.getRolesFromToken(user);
     this.currentUser.set(user);
+    this.likeService.getLikeIds();
   }
   
   getMbtis() {

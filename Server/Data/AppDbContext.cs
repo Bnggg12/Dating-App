@@ -67,7 +67,23 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<
             entity.Property(p => p.Url).HasMaxLength(500);
             entity.Property(p => p.PublicId).HasMaxLength(255);
         });
+
+        builder.Entity<UserLike>(entity =>
+        {
+            entity.HasKey(x => new { x.SourceMemberId, x.TargetMemberId });
+
+            entity.HasOne(s => s.SourceMember)
+            .WithMany(t => t.LikedMembers)
+            .HasForeignKey(s => s.SourceMemberId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(s => s.TargetMember)
+            .WithMany(t => t.LikeByMembers)
+            .HasForeignKey(s => s.TargetMemberId)
+            .OnDelete(DeleteBehavior.NoAction);
+        });
     }
 
     public DbSet<Photo> Photos { get; set; }
+    public DbSet<UserLike> Likes { get; set; }
 }

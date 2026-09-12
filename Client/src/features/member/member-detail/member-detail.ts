@@ -4,18 +4,21 @@ import { AgePipe } from '../../../core/pipes/age-pipe';
 import { UserService } from '../../../core/services/user-service';
 import { AccountService } from '../../../core/services/account-service';
 import { filter } from 'rxjs';
+import { LikeService } from '../../../core/services/like-service';
+import { TimeAgoPipe } from '../../../core/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-member-detail',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, AgePipe],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, AgePipe, TimeAgoPipe],
   templateUrl: './member-detail.html',
   styleUrl: './member-detail.css',
 })
 export class MemberDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  protected accountService = inject(AccountService);
   protected userService = inject(UserService);
-  private accountService = inject(AccountService);
+  protected likeService = inject(LikeService);
 
   protected title = signal<string | undefined>('Thông tin cá nhân');
   private routeId = signal<number | null>(null);
@@ -43,5 +46,12 @@ export class MemberDetail implements OnInit {
         this.title.set(this.route.firstChild?.snapshot?.title);
       }
     });
+  }
+
+  isOnline(lastActiveDate: string | Date | undefined): boolean {
+    if (!lastActiveDate) return false;
+
+    const diffInMinutes = (new Date().getTime() - new Date(lastActiveDate).getTime()) / (1000 * 60);
+    return diffInMinutes >= 0 && diffInMinutes <= 3;
   }
 }

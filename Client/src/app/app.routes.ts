@@ -7,6 +7,7 @@ import { MemberPhoto } from '../features/member/member-photo/member-photo';
 import { adminGuard } from '../core/guard/admin-guard';
 import { Admin } from '../features/admin/admin';
 import { authGuard } from '../core/guard/auth-guard';
+import { List } from '../features/list/list';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -22,14 +23,12 @@ export const routes: Routes = [
                 component: MemberDetail,
                 children: [
                     { path: '', redirectTo: 'profile', pathMatch: 'full' },
-                    { path: 'profile', component: MemberProfile, title: 'Thông tin cá nhân',
-                        // canDeactivate: [preventUnsavedChangesGuard] 
-                    },
+                    { path: 'profile', component: MemberProfile, title: 'Thông tin cá nhân'},
                     { path: 'photos', component: MemberPhoto, title: 'Bộ sưu tập ảnh' },
                     // { path: 'messages', component: MemberMessages, title: 'Messages' }
                 ]
             },
-            // { path: 'lists', component: Lists },
+            { path: 'lists', component: List },
             // { path: 'messages', component: Messages },
             { path: 'admin', component: Admin, canActivate: [adminGuard] }
         ]

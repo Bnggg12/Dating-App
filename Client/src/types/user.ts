@@ -83,3 +83,17 @@ export type PhotoForApprove = {
   userId: number;
   displayName: string;
 };
+
+export class UserParams {
+  pageNumber = 1;
+  pageSize = 10;
+  orderBy = 'lastActive';
+  minAge = 18;
+  maxAge = 100;
+  search?: string;
+  gender?: string;
+  lookingFor?: string;
+  city?: string;
+  mbti?: string;
+  educationLevel?: string;
+}

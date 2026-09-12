@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { tap } from 'rxjs';
-import { Photo, UserCard, UserProfile, UserUpdate } from '../../types/user';
+import { Photo, UserCard, UserParams, UserProfile, UserUpdate } from '../../types/user';
+import { PaginatedResult } from '../../types/pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +16,22 @@ export class UserService {
   user = signal<UserProfile | null>(null);
   editMode = signal<boolean>(false);
 
-  getMembers()  {
-    return this.http.get<UserCard[]>(this.baseUrl + 'user').pipe(
-      tap((users) => {
-        this.users.set(users);
-      })
-    );
-  }
+  getMembers(userParams: UserParams)  {
+    let params = new HttpParams()
+      .set('pageNumber', userParams.pageNumber)
+      .set('pageSize', userParams.pageSize)
+      .set('orderBy', userParams.orderBy)
+      .set('minAge', userParams.minAge)
+      .set('maxAge', userParams.maxAge);
+
+    if (userParams.search?.trim()) params = params.set('search', userParams.search.trim());
+    if (userParams.gender) params = params.set('gender', userParams.gender);
+    if (userParams.lookingFor) params = params.set('lookingFor', userParams.lookingFor);
+    if (userParams.city?.trim()) params = params.set('city', userParams.city.trim());
+    if (userParams.mbti) params = params.set('mbti', userParams.mbti);
+    if (userParams.educationLevel) params = params.set('educationLevel', userParams.educationLevel);
+
+    return this.http.get<PaginatedResult<UserCard>>(this.baseUrl + 'user', {params})};
 
   getMember(id: number) {
     return this.http.get<UserProfile>(this.baseUrl + 'user/' + id).pipe(

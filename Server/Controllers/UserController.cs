@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Core.Paginations;
 using Server.DTOs;
 using Server.Services;
 
@@ -12,10 +13,10 @@ namespace Server.Controllers;
 public class UserController(UserService userService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<UserCardDto>>> Get()
+    public async Task<ActionResult<PaginatedResult<UserCardDto>>> Get([FromQuery] UserParams userParams)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        return Ok(await userService.GetAsync(userId));
+        userParams.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        return Ok(await userService.GetAsync(userParams));
     }
 
     [HttpGet("{id}")]
