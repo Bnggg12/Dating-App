@@ -1,0 +1,111 @@
+<div class="max-w-5xl mx-auto mt-6">
+  <div class="flex justify-between items-center mb-6">
+    <div class="tabs tabs-boxed bg-base-200 p-1">
+      <button 
+        type="button" 
+        class="tab tab-sm sm:tab-md" 
+        [class.tab-active]="container() === 'Inbox'" 
+        (click)="setContainer('Inbox')">
+        Hộp thư đến
+      </button>
+      <button 
+        type="button" 
+        class="tab tab-sm sm:tab-md" 
+        [class.tab-active]="container() === 'Outbox'" 
+        (click)="setContainer('Outbox')">
+        Hộp thư đi
+      </button>
+    </div>
+  </div>
+
+  @if (messages().length > 0) {
+    <div class="bg-base-100 rounded-xl shadow-md border border-base-200 overflow-hidden divide-y divide-base-200">
+      @for (msg of messages(); track msg.id) {
+        @let targetId = container() === 'Outbox' ? msg.recipientId : msg.senderId;
+        
+        <div 
+          (click)="navigateToChat(msg)"
+          class="flex items-center gap-4 p-4 hover:bg-base-200/50 cursor-pointer transition-colors duration-150">
+
+          <div
+            class="avatar"
+            [class.avatar-online]="presenceService.onlineUsers().includes(targetId)">
+            <div class="w-12 h-12 rounded-full ring-1 ring-base-300 overflow-hidden">
+              <img 
+                [src]="(container() === 'Outbox' ? msg.recipientImageUrl : msg.senderImageUrl) || '/user.png'" 
+                [alt]="container() === 'Outbox' ? msg.recipientDisplayName : msg.senderDisplayName" />
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <h4 class="font-bold text-base truncate">
+                {{ container() === 'Outbox' ? msg.recipientDisplayName : msg.senderDisplayName }}
+              </h4>
+              <span class="text-xs text-base-content/60 shrink-0">
+                {{ msg.messageSent | timeAgo }}
+              </span>
+            </div>
+            
+            <p class="text-sm text-base-content/70 truncate mt-0.5">
+              {{ msg.content }}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 shrink-0">
+            @if (container() === 'Outbox') {
+              @if (msg.dateRead) {
+                <span class="badge badge-success badge-sm badge-outline">Đã xem</span>
+              } @else {
+                <span class="badge badge-ghost badge-sm">Đã gửi</span>
+              }
+            }
+
+            <button 
+              type="button" 
+              class="btn btn-ghost btn-circle btn-sm text-error hover:bg-error/10"
+              (click)="deleteMessage($event, msg.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 1 .75.75v7a.75.75 0 0 1-1.5 0v-7a.75.75 0 0 1 .75-.75Zm3.59 0a.75.75 0 0 1 .75.75v7a.75.75 0 0 1-1.5 0v-7a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (pagination() && pagination()!.totalPages > 1) {
+      <div class="flex justify-center my-6">
+        <div class="join">
+          <button 
+            type="button" 
+            class="join-item btn btn-sm" 
+            [disabled]="pageNumber === 1" 
+            (click)="pageChanged(pageNumber - 1)">
+            «
+          </button>
+          @for (p of pages(); track p) {
+            <button 
+              type="button" 
+              class="join-item btn btn-sm" 
+              [class.btn-active]="pageNumber === p" 
+              (click)="pageChanged(p)">
+              {{ p }}
+            </button>
+          }
+          <button 
+            type="button" 
+            class="join-item btn btn-sm" 
+            [disabled]="pageNumber === pagination()!.totalPages" 
+            (click)="pageChanged(pageNumber + 1)">
+            »
+          </button>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="text-center py-20 bg-base-100 rounded-xl border border-base-200 text-base-content/60">
+      Không có tin nhắn nào trong {{ container() === 'Inbox' ? 'hộp thư đến' : 'hộp thư đi' }}
+    </div>
+  }
+</div>

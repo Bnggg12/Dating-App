@@ -7,8 +7,6 @@ export class TimeAgoPipe implements PipeTransform {
   transform(value: string): string {
     if (value) {
       const seconds = Math.floor((+new Date() - +new Date(value)) / 1000);
-      if (seconds < 180)
-        return 'Đang hoạt động';
       const intervals: { [key: string]: number } = {
         'năm': 31536000,
         'tháng': 2592000,

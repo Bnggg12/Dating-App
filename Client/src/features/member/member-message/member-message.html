@@ -1,0 +1,85 @@
+<div class="flex flex-col h-[75vh] w-full bg-base-100 rounded-box border border-base-200">
+
+  <div class="flex-1 overflow-y-auto p-4 space-y-2">
+    @for (message of messageService.messageThread(); track message.id; let idx = $index) {
+      @let isMe = message.senderId === accountService.currentUser()?.id;
+      @let nextMsg = messageService.messageThread()[idx + 1];
+      @let isLastInGroup = !nextMsg || nextMsg.senderId !== message.senderId;
+
+      <div 
+        class="chat" 
+        [class.chat-end]="isMe" 
+        [class.chat-start]="!isMe">
+        
+        <div
+          class="chat-image avatar"
+          [class.avatar-online]="!isMe && isLastInGroup && presenceService.onlineUsers().includes(recipientId())">
+          @if (isLastInGroup) {
+            <div class="w-10 h-10 rounded-full ring-1 ring-base-300 overflow-hidden">
+              <img 
+                [src]="message.senderImageUrl || '/user.png'" 
+                [alt]="message.senderDisplayName" />
+            </div>
+          } @else {
+            <div class="w-10 h-10"></div>
+          }
+        </div>
+
+        <div 
+          class="chat-bubble relative group cursor-default"
+          [class.chat-bubble-primary]="isMe"
+          [class.bg-base-200]="!isMe"
+          [class.text-base-content]="!isMe">
+          
+          <div 
+            class="tooltip tooltip-bottom" 
+            [attr.data-tip]="message.messageSent | date: 'HH:mm dd/MM/yyyy'">
+            {{ message.content }}
+          </div>
+        </div>
+
+        @if (isMe) {
+          <div class="chat-footer text-xs opacity-70 mt-0.5">
+            @if (message.dateRead) {
+              <div 
+                class="tooltip tooltip-left text-success font-medium cursor-help" 
+                [attr.data-tip]="'Đã xem: ' + (message.dateRead | date: 'HH:mm dd/MM/yyyy')">
+                Đã xem
+              </div>
+            } @else {
+              <div 
+                class="tooltip tooltip-left cursor-help" 
+                [attr.data-tip]="'Đã gửi: ' + (message.messageSent | date: 'HH:mm dd/MM/yyyy')">
+                Đã gửi
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <div #messageEndRef></div>
+  </div>
+
+  <div class="p-3 bg-base-200/50 border-t border-base-200">
+    <form (ngSubmit)="sendMessage()" class="flex items-center gap-2">
+      <input 
+        type="text" 
+        [(ngModel)]="messageContent" 
+        name="messageContent" 
+        placeholder="Nhập tin nhắn..." 
+        autocomplete="off"
+        class="input input-bordered w-full input-sm sm:input-md focus:outline-hidden" />
+
+      <button 
+        type="submit" 
+        [disabled]="!messageContent().trim()"
+        class="btn btn-primary btn-sm sm:btn-md shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+          <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+        </svg>
+        <span class="hidden sm:inline">Gửi</span>
+      </button>
+    </form>
+  </div>
+</div>

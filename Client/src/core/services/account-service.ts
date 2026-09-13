@@ -4,6 +4,8 @@ import { environment } from '../../environments/environment.development';
 import { Login, Register, User } from '../../types/user';
 import { tap } from 'rxjs';
 import { LikeService } from './like-service';
+import { PresenceService } from './presence-service';
+import { HubConnectionState } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,7 @@ export class AccountService {
   private baseUrl = environment.apiUrl;
   private refreshIntervalId: any = null;
   private likeService = inject(LikeService);
+  private presenceService = inject(PresenceService);
 
   currentUser = signal<User | null>(null);
 
@@ -69,6 +72,7 @@ export class AccountService {
       next: () => {
         this.currentUser.set(null);
         this.likeService.clearLikeIds();
+        this.presenceService.stopHubConnection();
       }
     })
   }
@@ -77,6 +81,7 @@ export class AccountService {
     user.roles = this.getRolesFromToken(user);
     this.currentUser.set(user);
     this.likeService.getLikeIds();
+    this.presenceService.createHubConnection(user.token);
   }
   
   getMbtis() {

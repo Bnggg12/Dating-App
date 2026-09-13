@@ -7,6 +7,7 @@ import { LikeService } from '../../../core/services/like-service';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../../core/services/account-service';
 import { PaginatedResult } from '../../../types/pagination';
+import { PresenceService } from '../../../core/services/presence-service';
 
 @Component({
   selector: 'app-member-list',
@@ -18,6 +19,7 @@ export class MemberList implements OnInit {
   private accountService = inject(AccountService);
   private memberService = inject(UserService);
   protected likeService = inject(LikeService);
+  protected presenceService = inject(PresenceService);
 
   protected users = signal<UserCard[]>([]);
   protected userParams = new UserParams();

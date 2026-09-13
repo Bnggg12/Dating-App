@@ -82,8 +82,24 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<
             .HasForeignKey(s => s.TargetMemberId)
             .OnDelete(DeleteBehavior.NoAction);
         });
+
+        builder.Entity<Message>(entity =>
+        {
+            entity.Property(p => p.Content).HasMaxLength(500);
+
+            entity.HasOne(m => m.Recipient)
+                .WithMany(u => u.MessagesReceived)
+                .HasForeignKey(m => m.RecipientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(m => m.Sender)
+                .WithMany(u => u.MessagesSent)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 
     public DbSet<Photo> Photos { get; set; }
     public DbSet<UserLike> Likes { get; set; }
+    public DbSet<Message> Messages { get; set; }
 }

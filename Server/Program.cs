@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Server.Core.Hubs;
+using Server.Core.SignalR;
 using Server.Data;
 using Server.Helpers;
 using Server.Middlewares;
@@ -25,7 +27,10 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<PhotoService>();
 builder.Services.AddScoped<LikeService>();
+builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<LogUserActivity>();
+builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers(options =>
 {
@@ -55,6 +60,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
        };
+
+       options.Events = new JwtBearerEvents
+       {
+           OnMessageReceived = context =>
+           {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                    context.Token = accessToken;
+
+                return Task.CompletedTask;
+           }
+       };
     });
 
 builder.Services.AddAuthorization();
@@ -77,5 +96,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 app.Run();

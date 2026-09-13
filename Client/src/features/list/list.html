@@ -22,6 +22,10 @@
             [src]="user.imageUrl || '/user.png'" 
             [alt]="user.displayName"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+
+            @if (presenceService.onlineUsers().includes(user.id)) {
+              <span class="absolute top-3 left-3 z-10 size-3.5 bg-success border-2 border-base-100 rounded-full shadow-sm"></span>
+            }
           
           <button 
             class="btn btn-circle btn-sm absolute top-3 right-3 z-10 border-none hover:bg-black/60 text-white"

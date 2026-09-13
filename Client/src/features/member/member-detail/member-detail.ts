@@ -6,6 +6,7 @@ import { AccountService } from '../../../core/services/account-service';
 import { filter } from 'rxjs';
 import { LikeService } from '../../../core/services/like-service';
 import { TimeAgoPipe } from '../../../core/pipes/time-ago-pipe';
+import { PresenceService } from '../../../core/services/presence-service';
 
 @Component({
   selector: 'app-member-detail',
@@ -19,6 +20,7 @@ export class MemberDetail implements OnInit {
   protected accountService = inject(AccountService);
   protected userService = inject(UserService);
   protected likeService = inject(LikeService);
+  protected presenceService = inject(PresenceService);
 
   protected title = signal<string | undefined>('Thông tin cá nhân');
   private routeId = signal<number | null>(null);
@@ -46,12 +48,5 @@ export class MemberDetail implements OnInit {
         this.title.set(this.route.firstChild?.snapshot?.title);
       }
     });
-  }
-
-  isOnline(lastActiveDate: string | Date | undefined): boolean {
-    if (!lastActiveDate) return false;
-
-    const diffInMinutes = (new Date().getTime() - new Date(lastActiveDate).getTime()) / (1000 * 60);
-    return diffInMinutes >= 0 && diffInMinutes <= 3;
   }
 }

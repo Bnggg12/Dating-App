@@ -29,4 +29,7 @@ public class AppUser : IdentityUser<int>
 
     public List<UserLike> LikeByMembers { get; set; } = [];
     public List<UserLike> LikedMembers { get; set; } = [];
+
+    public List<Message> MessagesSent { get; set; } = [];
+    public List<Message> MessagesReceived { get; set; } = [];
 }

@@ -4,6 +4,7 @@ import { UserLike } from '../../types/like';
 import { MemberList } from '../member/member-list/member-list';
 import { RouterLink } from '@angular/router';
 import { AgePipe } from '../../core/pipes/age-pipe';
+import { PresenceService } from '../../core/services/presence-service';
 
 @Component({
   selector: 'app-list',
@@ -13,6 +14,7 @@ import { AgePipe } from '../../core/pipes/age-pipe';
 })
 export class List {
   protected likeService = inject(LikeService);
+  protected presenceService = inject(PresenceService);
   protected members = signal<UserLike[]>([]);
   protected type = 'mutual';
 

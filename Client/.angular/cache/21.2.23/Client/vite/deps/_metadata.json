@@ -1,70 +1,79 @@
 {
-  "hash": "b795b8f9",
-  "configHash": "b618407d",
-  "lockfileHash": "2690530c",
-  "browserHash": "c907b381",
+  "hash": "b4f7d2ca",
+  "configHash": "726d46a2",
+  "lockfileHash": "f555a190",
+  "browserHash": "a1036b67",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "54242308",
+      "fileHash": "90ddd8aa",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "3c06694b",
+      "fileHash": "a9542e53",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "ac8e10a4",
+      "fileHash": "4665169e",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "49d2c4c0",
+      "fileHash": "353c7ee0",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "5910b033",
+      "fileHash": "56b31f13",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "a2cf03b0",
+      "fileHash": "bed34dec",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "a7c738b4",
+      "fileHash": "0d767d1b",
+      "needsInterop": false
+    },
+    "@microsoft/signalr": {
+      "src": "../../../../../../node_modules/@microsoft/signalr/dist/esm/index.js",
+      "file": "@microsoft_signalr.js",
+      "fileHash": "273afbc2",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-2FPN462P": {
-      "file": "chunk-2FPN462P.js"
+    "chunk-5BYFBXNR": {
+      "file": "chunk-5BYFBXNR.js"
     },
-    "chunk-TMVPVQRR": {
-      "file": "chunk-TMVPVQRR.js"
+    "chunk-P67XWKWV": {
+      "file": "chunk-P67XWKWV.js"
     },
-    "chunk-JNUBSORW": {
-      "file": "chunk-JNUBSORW.js"
+    "chunk-LEGIFHS5": {
+      "file": "chunk-LEGIFHS5.js"
     },
-    "chunk-WLX7ZQBF": {
-      "file": "chunk-WLX7ZQBF.js"
+    "chunk-UNPPAPLK": {
+      "file": "chunk-UNPPAPLK.js"
     },
-    "chunk-5EALC7RR": {
-      "file": "chunk-5EALC7RR.js"
+    "chunk-AHYUJN7L": {
+      "file": "chunk-AHYUJN7L.js"
     },
-    "chunk-PJVWDKLX": {
-      "file": "chunk-PJVWDKLX.js"
+    "chunk-RSS3ODKE": {
+      "file": "chunk-RSS3ODKE.js"
+    },
+    "chunk-XSXJULYR": {
+      "file": "chunk-XSXJULYR.js"
     }
   }
 }

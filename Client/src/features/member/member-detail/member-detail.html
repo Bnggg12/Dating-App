@@ -8,7 +8,7 @@
             [alt]="member.displayName" 
             class="rounded-full w-40 h-40 object-cover shadow-inner border-2 border-primary/20" />
           
-          @if (isOnline(member.lastActive)) {
+          @if (presenceService.onlineUsers().includes(member.id)) {
             <span class="absolute bottom-2 right-2 size-4 bg-success border-2 border-base-100 rounded-full shadow-sm"></span>
           }
         </div>
@@ -23,9 +23,15 @@
           
           <p class="text-xs text-base-content/70 flex items-center gap-1.5 mt-1">
             <span class="inline-block size-2 rounded-full" 
-                  [class.bg-success]="isOnline(member.lastActive)" 
-                  [class.bg-base-content/30]="!isOnline(member.lastActive)"></span>
-            <span>{{ member.lastActive | timeAgo }}</span>
+                  [class.bg-success]="presenceService.onlineUsers().includes(member.id)" 
+                  [class.bg-base-content/30]="!presenceService.onlineUsers().includes(member.id)"></span>
+            <span>
+              @if (presenceService.onlineUsers().includes(member.id)) {
+                Đang hoạt động
+              } @else {
+                {{ member.lastActive | timeAgo }}
+              }
+            </span>
           </p>
         </div>
       </div>
@@ -39,6 +45,9 @@
           </li>
           <li>
             <a routerLink="photos" routerLinkActive="active font-semibold">Bộ sưu tập ảnh</a>
+          </li>
+          <li>
+            <a routerLink="messages" routerLinkActive="active font-semibold">Nhắn tin</a>
           </li>
         </ul>
       </div>
